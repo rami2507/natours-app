@@ -30,14 +30,16 @@ const sendErrorProd = (err, res) => {
   }
 };
 
+const devMode = "production";
+
 const globalErrorHandling = (err, req, res, next) => {
   err.status = err.status || "error";
   err.statusCode = err.statusCode || 500;
 
-  if (process.env.NODE_ENV == "development") {
+  if (devMode == "development") {
     // console.log(err.code);
     sendErrorDev(err, res);
-  } else if (process.env.NODE_ENV == "production") {
+  } else if (devMode == "production") {
     if (err.name === "CastError") {
       err.message = "Invalid ID";
       err.statusCode = 404;

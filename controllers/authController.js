@@ -8,7 +8,7 @@ const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 
 const signToken = (id) => {
-  return jwt.sign({ id: id }, process.env.JWT_SECRET, {
+  return jwt.sign({ id: id }, "RAmi2002", {
     expiresIn: 30000000,
   });
 };
@@ -20,9 +20,9 @@ const createSendToken = (user, statusCode, res) => {
     expires: new Date(Date.now() + 900000000),
   };
 
-  if (process.env.NODE_ENV === "production") {
-    cookieOptions.secure = true;
-  }
+  // if (process.env.NODE_ENV === "production") {
+  //   cookieOptions.secure = true;
+  // }
 
   res.cookie("jwt", token, cookieOptions);
 
@@ -107,7 +107,7 @@ exports.protect = catchAsync(async (req, res, next) => {
       new AppError("Your are not logged in! Please login to get access", 401)
     );
   // 2) Validate token
-  const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+  const decoded = await promisify(jwt.verify)(token, "RAmi2002");
   // 3) Check If User Still Exist
   const currentUser = await User.findById(decoded.id);
   if (!currentUser) {
@@ -131,10 +131,7 @@ exports.isLoggedIn = catchAsync(async (req, res, next) => {
   try {
     if (req.cookies.jwt) {
       // 1) Verify Token
-      const decoded = await promisify(jwt.verify)(
-        req.cookies.jwt,
-        process.env.JWT_SECRET
-      );
+      const decoded = await promisify(jwt.verify)(req.cookies.jwt, "RAmi2002");
 
       // 3) Check If User Still Exist
       const currentUser = await User.findById(decoded.id);
