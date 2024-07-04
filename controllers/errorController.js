@@ -21,7 +21,7 @@ const sendErrorProd = (err, res) => {
     // (hna chghol error yessra w mech 7na li dernah ya3ni isOperational rah tkoun false)
   } else {
     // LOG error
-    console.error(err);
+    // console.error(err);
     // Send generic message
     res.status(500).json({
       status: "error",

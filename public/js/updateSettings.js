@@ -3,13 +3,13 @@ import { showAlert } from "./alerts";
 
 export const updateSettings = async (data, type) => {
   try {
-    console.log(data);
+    // console.log(data);
     const res = await axios({
       method: "PATCH",
       url:
         type === "data"
-          ? "http://127.0.0.1:3000/api/v2/users/updateMe"
-          : "http://127.0.0.1:3000/api/v2/users/updateMyPassword",
+          ? "/api/v2/users/updateMe"
+          : "/api/v2/users/updateMyPassword",
       data,
     });
     if (res.data.status === "success") {

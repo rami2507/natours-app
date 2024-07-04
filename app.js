@@ -8,6 +8,7 @@ const helmet = require("helmet");
 const mongoSanitize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
 const cookieParser = require("cookie-parser");
+const compression = require("compression");
 
 // Create an Express application
 const app = express();
@@ -61,6 +62,9 @@ const userRoutes = require("./routes/userRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
 const viewsRoutes = require("./routes/viewsRoutes");
 const bookingRoutes = require("./routes/bookingRoutes");
+
+// COMPRESS TEXT RESPONSES
+app.use(compression());
 
 // B) ROUTES
 app.use("/", viewsRoutes);

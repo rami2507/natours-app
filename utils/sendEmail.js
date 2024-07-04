@@ -64,6 +64,5 @@ module.exports = class Email {
       "passwordReset",
       "Your password reset token (valid for only 10 minutes)"
     );
-    console.log("email sent!");
   }
 };
