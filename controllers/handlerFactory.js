@@ -1,9 +1,8 @@
-const { model } = require("mongoose");
 const AppError = require("./../utils/AppError");
-const catchAsync = require("./../utils/catchAsync");
+const asyncHandler = require("express-async-handler");
 
 exports.deleteOne = (model) => {
-  return catchAsync(async (req, res, next) => {
+  return asyncHandler(async (req, res, next) => {
     const doc = await model.findByIdAndDelete(req.params.id);
     if (!doc) {
       return next(new AppError("No tour found with that ID!", 404));
@@ -16,7 +15,7 @@ exports.deleteOne = (model) => {
 };
 
 exports.updateOne = (model) => {
-  return catchAsync(async (req, res, next) => {
+  return asyncHandler(async (req, res, next) => {
     const doc = await model.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
@@ -29,7 +28,7 @@ exports.updateOne = (model) => {
 };
 
 exports.createOne = (model) => {
-  return catchAsync(async (req, res, next) => {
+  return asyncHandler(async (req, res, next) => {
     const doc = await model.create(req.body, { runValidators: true });
     res.status(201).json({
       status: "success",
@@ -39,7 +38,7 @@ exports.createOne = (model) => {
 };
 
 exports.getOne = (model) => {
-  return catchAsync(async (req, res, next) => {
+  return asyncHandler(async (req, res, next) => {
     const doc = await model.findById(req.params.id);
     if (!doc) {
       return next(new AppError("No tour found with that ID!", 404));
@@ -52,7 +51,7 @@ exports.getOne = (model) => {
 };
 
 exports.getAll = (model) => {
-  return catchAsync(async (req, res, next) => {
+  return asyncHandler(async (req, res, next) => {
     const queryObj = { ...req.query };
     const excludedFields = ["sort", "page", "fields", "limit"];
 

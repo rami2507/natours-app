@@ -9,6 +9,8 @@ const mongoSanitize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
 const cookieParser = require("cookie-parser");
 const compression = require("compression");
+const dotenv = require("dotenv");
+const server = require("./server");
 
 // Create an Express application
 const app = express();
@@ -19,6 +21,9 @@ app.set("views", path.join(__dirname, "/views")); // PATH TO OUR VIEWS
 
 // SERVE STATIC FILES
 app.use(express.static(path.join(__dirname, "public")));
+
+// PATH TO ENV VARS
+dotenv.config({ path: "./.env" });
 
 // 1) WE BASICALLY START WITH SECURITY MIDDLEWARES FIRST
 // A) Set security HTTP Headers
@@ -82,6 +87,15 @@ app.all("*", function (req, res, next) {
 // 4) Global error handling middleware
 // A) Error handling middleware to catch and handle all errors
 app.use(globalErrorHandling);
+
+// ERRORS OUT PF EXPRESS-JS
+process.on("unhandledRejection", (err) => {
+  console.error(`Unhandled Rejection Error: ${err}`);
+  server.close(() => {
+    console.error("Shutting Down");
+    process.exit(1);
+  });
+});
 
 // 5) Export the configured Express application
 module.exports = app;

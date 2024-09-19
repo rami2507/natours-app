@@ -7,21 +7,21 @@ module.exports = class Email {
     this.to = user.email;
     this.firstName = user.name.split(" ")[0];
     this.url = url;
-    this.from = "Rami Laloui <test@rami.io>";
+    this.from = `${process.env.FROM_NAME} <${process.env.SMTP_USERNAME}>`;
   }
 
   newTransport() {
-    // if (process.env.NODE_ENV === "production") {
-    //   //SENDGRID
-    //   return 1;
-    // }
+    if (process.env.NODE_ENV === "production") {
+      //SENDGRID
+      return 1;
+    }
     return nodemailer.createTransport({
-      host: "mail.pt",
-      port: 587, // Port for STARTTLS
+      host: process.env.SMTP_HOST,
+      port: process.env.SMTP_PORT, // Port for STARTTLS
       secure: false, // Use STARTTLS
       auth: {
-        user: "ado@mail.pt",
-        pass: "zxcvbNM987",
+        user: process.env.SMTP_USERNAME,
+        pass: process.env.SMTP_PASSWORD,
         authMethod: "PLAIN",
       },
       tls: {

@@ -1,6 +1,6 @@
-const catchAsync = require("./../utils/catchAsync");
 const Review = require("./../models/reviewModel");
 const factory = require("./handlerFactory.js");
+const asyncHandler = require("express-async-handler");
 
 exports.setTourUserIds = (req, res, next) => {
   if (!req.body.tour) req.body.tour = req.params.id;
@@ -8,7 +8,7 @@ exports.setTourUserIds = (req, res, next) => {
   next();
 };
 exports.createReview = factory.createOne(Review);
-exports.getAllReviews = catchAsync(async (req, res, next) => {
+exports.getAllReviews = asyncHandler(async (req, res, next) => {
   let filter = {};
   if (req.params.tourID) filter = { tour: req.params.tourID };
   const reviews = await Review.find(filter);

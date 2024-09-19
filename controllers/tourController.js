@@ -1,9 +1,9 @@
 const Tour = require("./../models/tourModel");
 const AppError = require("./../utils/AppError");
-const catchAsync = require("./../utils/catchAsync");
 const factory = require("./handlerFactory.js");
 const multer = require("multer");
 const sharp = require("sharp");
+const asyncHandler = require("express-async-handler");
 
 const multerStorage = multer.memoryStorage();
 
@@ -22,7 +22,7 @@ exports.uploadTourImages = upload.fields([
   { name: "images", maxCount: 3 },
 ]);
 
-exports.resizeTourimages = catchAsync(async (req, res, next) => {
+exports.resizeTourimages = asyncHandler(async (req, res, next) => {
   if (!req.files.imageCover || !req.files.images) return next();
 
   // 1) Cover Image
@@ -59,7 +59,7 @@ exports.updateTour = factory.updateOne(Tour);
 
 exports.deleteTour = factory.deleteOne(Tour);
 
-exports.getToursWithin = catchAsync(async (req, res, next) => {
+exports.getToursWithin = asyncHandler(async (req, res, next) => {
   const { distance, latlng, unit } = req.params;
   const [lat, lng] = latlng.split(",");
   if (!lat || !lng) {
@@ -79,7 +79,7 @@ exports.getToursWithin = catchAsync(async (req, res, next) => {
     .json({ status: "success", results: tours.length, data: { data: tours } });
 });
 
-exports.getDistances = catchAsync(async (req, res, next) => {
+exports.getDistances = asyncHandler(async (req, res, next) => {
   const { latlang, unit } = req.params;
   const [lat, lang] = latlang.split(",");
   if (!lat || !lang) {

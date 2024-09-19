@@ -1,6 +1,7 @@
 const Tour = require("./../models/tourModel");
-const catchAsync = require("./../utils/catchAsync");
-exports.getOverview = catchAsync(async (req, res, next) => {
+const asyncHandler = require("express-async-handler");
+
+exports.getOverview = asyncHandler(async (req, res, next) => {
   // GET TOUR DATA
   const tours = await Tour.find();
   // BUILD TEMPLATE IN (OVERVIEW.PUG)
@@ -11,7 +12,7 @@ exports.getOverview = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getTour = catchAsync(async (req, res, next) => {
+exports.getTour = asyncHandler(async (req, res, next) => {
   const slug = req.params.slug;
   const tour = await Tour.findOne({ slug });
   res.status(200).render("tour", { title: tour.name, tour }); // Render the "tour" view and pass the tour data

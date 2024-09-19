@@ -1,4 +1,4 @@
-const catchAsync = require("./../utils/catchAsync");
+const asyncHandler = require("express-async-handler");
 const AppError = require("./../utils/AppError");
 const User = require("./../models/userModel");
 const multer = require("multer");
@@ -28,7 +28,7 @@ const multerFilter = (req, file, cb) => {
 
 const upload = multer({ storage: multerStorage, fileFilter: multerFilter });
 
-exports.resizeUserphoto = catchAsync(async (req, res, next) => {
+exports.resizeUserphoto = asyncHandler(async (req, res, next) => {
   if (!req.file) return next();
 
   req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
@@ -61,7 +61,7 @@ exports.getUser = factory.getOne(User);
 exports.updateUser = factory.updateOne(User);
 exports.deleteUser = factory.deleteOne(User);
 
-exports.updateMe = catchAsync(async (req, res, next) => {
+exports.updateMe = asyncHandler(async (req, res, next) => {
   // CREATE ERROR IF USER POSTS PASSWORD DATA
   if (req.body.password || req.body.passwordConfirm) {
     return next(
@@ -86,7 +86,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.deleteMe = catchAsync(async (req, res, next) => {
+exports.deleteMe = asyncHandler(async (req, res, next) => {
   await User.findByIdAndDelete(req.user.id);
   res.status(204).json({
     status: "success",

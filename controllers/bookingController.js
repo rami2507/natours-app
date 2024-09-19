@@ -1,10 +1,8 @@
-const AppError = require("../utils/AppError");
-const catchAsync = require("../utils/catchAsync");
 const Tour = require("./../models/tourModel");
-const factory = require("./handlerFactory");
+const asyncHandler = require("express-async-handler");
 const stripe = require("stripe")("jdkfmalekfvjekwdelfkejfkwnekje");
 
-exports.getCheckoutSession = catchAsync(async (req, res, next) => {
+exports.getCheckoutSession = asyncHandler(async (req, res, next) => {
   // GET THE CURRENTLY BOOKED TOUR
   const tour = await Tour.findById(req.params.tourID);
 
